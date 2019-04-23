@@ -18,6 +18,9 @@ import pifi.var_io as var_io
 import pifi.etc_io as etc_io
 import pifi.leds as leds
 
+def handle_ap(pifi_conf_settings, ApModeDevice, ClientModeDevice):
+    start_ap_mode(pifi_conf_settings, ApModeDevice, ClientModeDevice)
+
 def handle_button(pifi_conf_settings, ApModeDevice, ClientModeDevice):
     button = None
 
@@ -97,7 +100,11 @@ def main():
             % ClientModeDevice.SpecificDevice().ActiveAccessPoint.Ssid)
         leds.off(status_led)
         # Run button handler, and when that is done, exit
-        handle_button(pifi_conf_settings, ApModeDevice, ClientModeDevice)
+        if (pifi_conf_settings['button_device_name']=="ap_req"):
+            print("required AP")
+            handle_ap(pifi_conf_settings, ApModeDevice, ClientModeDevice)
+        else:
+            handle_button(pifi_conf_settings, ApModeDevice, ClientModeDevice)
         return
     else:
         print("Device is not connected to any network, Looking for pending connections")
